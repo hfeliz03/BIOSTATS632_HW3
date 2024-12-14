@@ -1,5 +1,5 @@
 ---
-title: "HW3"
+title: "Heonir Feliz HW3"
 output:
   html_document:
     df_print: paged
@@ -81,11 +81,12 @@ Write code (function calls) in your notebook to print the error message (set chu
 
 ### Input `dat` does NOT contain variable iso, year and/or cp
 ```{r, error= TRUE, include = T}
-dat <- read.csv("MyPackage/data/contraceptive_use-2.csv")
-
-plot_cp(dat %>% select(-iso), est, iso_code = 4)
-plot_cp(dat %>% select(-year), est, iso_code = 4)
-plot_cp(dat %>% select(-cp), est, iso_code = 4)
+dat <- read.csv("MyPackage/data/est-2.csv")
+data <- read.csv("MyPackage/data/contraceptive_use-2.csv")
+devtools::load_all("MyPackage")
+plot_cp(data, est %>% select(-iso), iso_code = 4)
+plot_cp(data %>% select(-contraceptive_use_modern), est %>% select(-Year), iso_code = 4)
+plot_cp(data %>% select(-contraceptive_use_modern), est %>% (-Year), iso_code = 4)
 ```
 
 ### iso_code is not found in "dat" or "est"
@@ -98,7 +99,7 @@ plot_cp(dat, est %>% select(-iso), iso_code = 4)
 ### cp is not numeric
 ```{r, error = T, include = T}
 dat_bug <- dat %>%
-  mutate(cp = FALSE)
+  mutate("contraceptive_use_modern" = FALSE)
 plot_cp(dat_bug, est, iso_code = 4)
 ```
 
@@ -123,6 +124,7 @@ Add the testing set up to your package and write unit tests to verify that the f
 (ii) returns NA if coverage = 95 and U95 and/or L95 are missing. 
 
 ```{r, include = TRUE}
-#devtools::test()
+
+devtools::test("./MyPackage")
 ```
 

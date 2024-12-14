@@ -11,7 +11,7 @@
 
 
 
-<title>HW3</title>
+<title>Heonir Feliz HW3</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1619,7 +1619,7 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">HW3</h1>
+<h1 class="title toc-ignore">Heonir Feliz HW3</h1>
 
 </div>
 
@@ -1777,41 +1777,35 @@ can still knit the rmd). See examples below.</p>
 <div id="input-dat-does-not-contain-variable-iso-year-andor-cp" class="section level3">
 <h3>Input <code>dat</code> does NOT contain variable iso, year and/or
 cp</h3>
-<pre class="r"><code>dat &lt;- read.csv(&quot;MyPackage/data/contraceptive_use-2.csv&quot;)
-
-plot_cp(dat %&gt;% select(-iso), est, iso_code = 4)</code></pre>
-<pre><code>## Error in `select()`:
-## ! Can&#39;t select columns that don&#39;t exist.
-## ✖ Column `iso` doesn&#39;t exist.</code></pre>
-<pre class="r"><code>plot_cp(dat %&gt;% select(-year), est, iso_code = 4)</code></pre>
-<pre><code>## Error in `select()`:
-## ! Can&#39;t select columns that don&#39;t exist.
-## ✖ Column `year` doesn&#39;t exist.</code></pre>
-<pre class="r"><code>plot_cp(dat %&gt;% select(-cp), est, iso_code = 4)</code></pre>
-<pre><code>## Error in `select()`:
-## ! Can&#39;t select columns that don&#39;t exist.
-## ✖ Column `cp` doesn&#39;t exist.</code></pre>
+<pre class="r"><code>dat &lt;- read.csv(&quot;MyPackage/data/est-2.csv&quot;)
+data &lt;- read.csv(&quot;MyPackage/data/contraceptive_use-2.csv&quot;)
+devtools::load_all(&quot;MyPackage&quot;)</code></pre>
+<pre><code>## ℹ Loading MyPackage</code></pre>
+<pre class="r"><code>plot_cp(data, est %&gt;% select(-iso), iso_code = 4)</code></pre>
+<pre><code>## Error in plot_cp(data, est %&gt;% select(-iso), iso_code = 4): Input data file `dat` must contain variable:  input data file `est` must contain variable: iso</code></pre>
+<pre class="r"><code>plot_cp(data %&gt;% select(-contraceptive_use_modern), est %&gt;% select(-Year), iso_code = 4)</code></pre>
+<pre><code>## Error in plot_cp(data %&gt;% select(-contraceptive_use_modern), est %&gt;% select(-Year), : Input data file `dat` must contain variable: contraceptive_use_modern input data file `est` must contain variable: Year</code></pre>
+<pre class="r"><code>plot_cp(data %&gt;% select(-contraceptive_use_modern), est %&gt;% (-Year), iso_code = 4)</code></pre>
+<pre><code>## Error: objeto &#39;Year&#39; no encontrado</code></pre>
 </div>
 <div id="iso_code-is-not-found-in-dat-or-est" class="section level3">
 <h3>iso_code is not found in “dat” or “est”</h3>
 <pre class="r"><code>plot_cp(dat %&gt;% select(-iso), est, iso_code = 4)</code></pre>
-<pre><code>## Error in `select()`:
-## ! Can&#39;t select columns that don&#39;t exist.
-## ✖ Column `iso` doesn&#39;t exist.</code></pre>
+<pre><code>## Error in plot_cp(dat %&gt;% select(-iso), est, iso_code = 4): Input data file `dat` must contain variable: contraceptive_use_modern input data file `est` must contain variable:</code></pre>
 <pre class="r"><code>plot_cp(dat, est %&gt;% select(-iso), iso_code = 4)</code></pre>
-<pre><code>## Error in plot_cp(dat, est %&gt;% select(-iso), iso_code = 4): Input data file dat must contain variable(s): iso, year, cp</code></pre>
+<pre><code>## Error in plot_cp(dat, est %&gt;% select(-iso), iso_code = 4): Input data file `dat` must contain variable: contraceptive_use_modern input data file `est` must contain variable: iso</code></pre>
 </div>
 <div id="cp-is-not-numeric" class="section level3">
 <h3>cp is not numeric</h3>
 <pre class="r"><code>dat_bug &lt;- dat %&gt;%
-  mutate(cp = FALSE)
+  mutate(&quot;contraceptive_use_modern&quot; = FALSE)
 plot_cp(dat_bug, est, iso_code = 4)</code></pre>
-<pre><code>## Error in plot_cp(dat_bug, est, iso_code = 4): Input data file dat must contain variable(s): iso, year</code></pre>
+<pre><code>## Error in plot_cp(dat_bug, est, iso_code = 4): Input `cp` in the data file `dat` must be numeric.</code></pre>
 </div>
 <div id="ci-is-not-one-of-80-95-or-na" class="section level3">
 <h3>CI is not one of 80, 95, or NA</h3>
 <pre class="r"><code>plot_cp(dat, est, iso_code = 4, CI = 99)</code></pre>
-<pre><code>## Error in plot_cp(dat, est, iso_code = 4, CI = 99): Input data file dat must contain variable(s): iso, year, cp</code></pre>
+<pre><code>## Error in plot_cp(dat, est, iso_code = 4, CI = 99): CI must be: 80, 95, or NA.</code></pre>
 </div>
 </div>
 <div id="exercise-3-github" class="section level2">
@@ -1831,7 +1825,13 @@ that the function <code>get_width_ci</code> (i) correctly returns the
 width of a 95% interval, defined as U95-L95, for some dummy data set
 “est_dummy” (for which you know the answer) (ii) returns NA if coverage
 = 95 and U95 and/or L95 are missing.</p>
-<pre class="r"><code>#devtools::test()</code></pre>
+<pre class="r"><code>devtools::test(&quot;./MyPackage&quot;)</code></pre>
+<pre><code>## ℹ Testing MyPackage</code></pre>
+<pre><code>## ✔ | F W  S  OK | Context
+## ⠏ |          0 | somename                                                       ⠙ |          2 | somename                                                       ✔ |          2 | somename
+## 
+## ══ Results ═════════════════════════════════════════════════════════════════════
+## [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2 ]</code></pre>
 </div>
 </div>
 
